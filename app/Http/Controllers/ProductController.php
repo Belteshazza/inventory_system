@@ -22,7 +22,12 @@ class ProductController extends Controller
         }
 
         $product = Product::create($request->all());
-        return response()->json($product, 201);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product created successfully',
+            'data' => $product
+        ], 201);
+       
     }
 
     public function update(Request $request, $id)
@@ -41,13 +46,20 @@ class ProductController extends Controller
         }
 
         $product->update($request->all());
-        return response()->json($product, 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product updated successfully',
+            'data' => $product
+        ], 200);
     }
 
     public function index()
     {
         $products = Product::all();
-        return response()->json($products, 200);
+        return response()->json([
+            'status' => 'success',
+            'data' => $products
+        ]);
     }
 
     public function show($id)
@@ -60,26 +72,41 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->delete();
-        return response()->json(null, 204);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product deleted successfully',
+        ], 200);
     }
 
     public function hide($id)
     {
         $product = Product::findOrFail($id);
         $product->update(['is_hidden' => true]);
-        return response()->json(null, 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product hidden successfully',
+            'data' => $product
+        ], 200);
     }
 
     public function unhide($id)
     {
         $product = Product::findOrFail($id);
         $product->update(['is_hidden' => false]);
-        return response()->json(null, 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product unhidden successfully',
+            'data' => $product
+        ], 200);
     }
 
     public function stockNotifications()
     {
         $lowStockProducts = Product::where('stock_level', '<=', 5)->get();
-        return response()->json($lowStockProducts, 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product stock-notifications',
+            'data' => $lowStockProducts
+        ], 201);
     }
 }
